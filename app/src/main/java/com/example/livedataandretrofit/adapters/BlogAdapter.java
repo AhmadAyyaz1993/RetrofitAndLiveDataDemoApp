@@ -1,4 +1,4 @@
-package com.example.livedataandretrofit;
+package com.example.livedataandretrofit.adapters;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.livedataandretrofit.R;
 import com.example.livedataandretrofit.models.Blog;
 
 import java.util.List;

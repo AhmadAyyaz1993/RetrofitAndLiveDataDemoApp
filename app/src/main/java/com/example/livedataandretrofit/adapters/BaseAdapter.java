@@ -1,4 +1,4 @@
-package com.example.livedataandretrofit;
+package com.example.livedataandretrofit.adapters;
 
 import android.view.View;
 
