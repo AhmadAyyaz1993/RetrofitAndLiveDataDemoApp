@@ -13,6 +13,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
+import com.example.livedataandretrofit.adapters.BlogAdapter;
 import com.example.livedataandretrofit.models.Blog;
 import com.example.livedataandretrofit.viewmodels.BlogsViewModel;
 
