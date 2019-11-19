@@ -44,4 +44,5 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.stripe:stripe-android:12.4.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.2.0'
 }
