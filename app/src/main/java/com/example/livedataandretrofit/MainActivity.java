@@ -16,6 +16,10 @@ import android.os.Bundle;
 import com.example.livedataandretrofit.adapters.BlogAdapter;
 import com.example.livedataandretrofit.models.Blog;
 import com.example.livedataandretrofit.viewmodels.BlogsViewModel;
+import com.stripe.android.PaymentConfiguration;
+import com.stripe.android.Stripe;
+import com.stripe.android.model.ConfirmPaymentIntentParams;
+import com.stripe.android.model.PaymentMethodCreateParams;
 
 import java.util.List;
 
@@ -24,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     RecyclerView mRecyclerView;
     SwipeRefreshLayout swipeRefresh;
     private BlogsViewModel mainViewModel;
-
+    Stripe stripe;
     BlogAdapter mBlogAdapter;
 
     @Override
@@ -39,6 +43,15 @@ public class MainActivity extends AppCompatActivity {
         swipeRefresh.setOnRefreshListener(() -> {
             getPopularBlog();
         });
+
+        PaymentMethodCreateParams.Card card = PaymentMethodCreateParams.Card.create("");
+        PaymentMethodCreateParams params = PaymentMethodCreateParams.create(card);
+        if (params != null) {
+            ConfirmPaymentIntentParams confirmParams = ConfirmPaymentIntentParams
+                    .createWithPaymentMethodCreateParams(params, "");
+            stripe = new Stripe(getApplicationContext(), PaymentConfiguration.getInstance(getApplicationContext()).getPublishableKey());
+            stripe.confirmPayment(this, confirmParams);
+        }
     }
 
     private void initializationViews() {

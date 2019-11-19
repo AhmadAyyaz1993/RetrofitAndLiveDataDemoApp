@@ -2,7 +2,10 @@ package com.example.livedataandretrofit.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Blog {
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
+public class Blog extends RealmObject {
 
     @SerializedName("author")
     private String mAuthor;
@@ -16,6 +19,9 @@ public class Blog {
     private String mThumbnail;
     @SerializedName("title")
     private String mTitle;
+
+    @PrimaryKey
+    transient long mId;
 
     public String getAuthor() {
         return mAuthor;
@@ -65,4 +71,12 @@ public class Blog {
         mTitle = title;
     }
 
+
+    public long getmId() {
+        return mId;
+    }
+
+    public void setmId(long id) {
+        this.mId = id;
+    }
 }
