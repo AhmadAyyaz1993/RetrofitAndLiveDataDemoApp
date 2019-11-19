@@ -1,5 +1,6 @@
 package com.example.livedataandretrofit;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -10,15 +11,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
 import com.example.livedataandretrofit.adapters.BlogAdapter;
 import com.example.livedataandretrofit.models.Blog;
 import com.example.livedataandretrofit.viewmodels.BlogsViewModel;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.stripe.android.ApiResultCallback;
 import com.stripe.android.PaymentConfiguration;
+import com.stripe.android.PaymentIntentResult;
 import com.stripe.android.Stripe;
 import com.stripe.android.model.ConfirmPaymentIntentParams;
+import com.stripe.android.model.PaymentIntent;
 import com.stripe.android.model.PaymentMethodCreateParams;
 
 import java.util.List;
@@ -44,13 +51,14 @@ public class MainActivity extends AppCompatActivity {
             getPopularBlog();
         });
 
-        PaymentMethodCreateParams.Card card = PaymentMethodCreateParams.Card.create("");
+        PaymentMethodCreateParams.Card card = PaymentMethodCreateParams.Card.create("tok_mastercard_debit_transferSuccess");
         PaymentMethodCreateParams params = PaymentMethodCreateParams.create(card);
         if (params != null) {
             ConfirmPaymentIntentParams confirmParams = ConfirmPaymentIntentParams
-                    .createWithPaymentMethodCreateParams(params, "");
+                    .createWithPaymentMethodCreateParams(params, "pi_1Db4Eu2eZvKYlo2Cet17VHlp_secret_IvrnS53GJker7rUaDH2sM8CRw");
             stripe = new Stripe(getApplicationContext(), PaymentConfiguration.getInstance(getApplicationContext()).getPublishableKey());
             stripe.confirmPayment(this, confirmParams);
+
         }
     }
 
@@ -96,5 +104,38 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mBlogAdapter);
         mBlogAdapter.notifyDataSetChanged();
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Handle the result of stripe.confirmPayment
+        stripe.onPaymentResult(requestCode, data, new PaymentResultCallback());
+    }
+
+    private static final class PaymentResultCallback
+            implements ApiResultCallback<PaymentIntentResult> {
+
+
+        @Override
+        public void onSuccess(@NonNull PaymentIntentResult result) {
+
+
+            PaymentIntent paymentIntent = result.getIntent();
+            PaymentIntent.Status status = paymentIntent.getStatus();
+            if (status == PaymentIntent.Status.Succeeded) {
+                // Payment completed successfully
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+            } else if (status == PaymentIntent.Status.RequiresPaymentMethod) {
+                // Payment failed
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            }
+        }
+
+        @Override
+        public void onError(@NonNull Exception e) {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        }
     }
 }

@@ -2,13 +2,15 @@ package com.example.livedataandretrofit;
 
 import android.app.Application;
 
+import androidx.multidex.MultiDexApplication;
+
 import com.stripe.android.PaymentConfiguration;
 import com.stripe.android.Stripe;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-public class MyApp extends Application {
+public class MyApp extends MultiDexApplication {
     Stripe stripe;
     @Override
     public void onCreate() {
